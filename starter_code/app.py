@@ -41,9 +41,7 @@ db.init_app(app)
 migrate = Migrate(app,db)
 
 # TODO: connect to a local postgresql database
-app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = \
-  config.SQLALCHEMY_TRACK_MODIFICATIONS
+
 
 
 
@@ -186,6 +184,7 @@ def show_venue(venue_id):
   data["upcoming_shows"] = upcoming_shows
   data["past_shows_count"] = len(prev_shows)
   data["upcoming_shows_count"] = len(upcoming_shows)
+  print(data)
   # data1={
   #   "id": 1,
   #   "name": "The Musical Hop",
@@ -290,10 +289,10 @@ def create_venue_submission():
                     phone = form.phone.data,
                     image_link = form.image_link.data,
                     facebook_link = form.facebook_link.data,
-                    web_link = form.website_link.data,
+                    website = form.website_link.data,
                     genres = form.genres.data,
-                    talent_required = form.seeking_talent.data,
-                    talent_description = form.seeking_description.data
+                    seeking_talent = form.seeking_talent.data,
+                    seeking_description = form.seeking_description.data
                     )
       # Add data to db and commit
       db.session.add(venue)
@@ -532,9 +531,9 @@ def edit_artist(artist_id):
   form.phone.data = artist.phone
   form.image_link.data = artist.image_link
   form.facebook_link.data = artist.facebook_link
-  form.website_link.data = artist.web_link
-  form.seeking_venue.data = artist.venue_required
-  form.seeking_description.data = artist.venue_description
+  form.website_link.data = artist.website
+  form.seeking_venue.data = artist.seeking_venue
+  form.seeking_description.data = artist.seeking_description
   form.genres.data = artist.genres
 
   return render_template('forms/edit_artist.html', form=form, artist=artist)
@@ -559,10 +558,10 @@ def edit_artist_submission(artist_id):
     artist.phone = request.form['phone']
     artist.image_link = request.form['image_link']
     artist.facebook_link = request.form['facebook_link']
-    artist.web_link = request.form['website_link']
+    artist.website = request.form['website_link']
     artist.genres = request.form.getlist('genres')
-    artist.venue_required = seeking_venue
-    artist.venue_description = request.form['seeking_description']
+    artist.seeking_venue = seeking_venue
+    artist.seeking_description = request.form['seeking_description']
 
     db.session.commit()
   except:
@@ -608,9 +607,9 @@ def edit_venue(venue_id):
   form.phone.data = venue.phone
   form.image_link.data = venue.image_link
   form.facebook_link.data = venue.facebook_link
-  form.website_link.data = venue.web_link
-  form.seeking_talent.data = venue.talent_required
-  form.seeking_description.data = venue.talent_description
+  form.website_link.data = venue.website
+  form.seeking_talent.data = venue.seeking_talent
+  form.seeking_description.data = venue.seeking_description
   form.genres.data = venue.genres
   return render_template('forms/edit_venue.html', form=form, venue=venue)
 
@@ -635,10 +634,10 @@ def edit_venue_submission(venue_id):
     venue.phone = request.form['phone']
     venue.image_link = request.form['image_link']
     venue.facebook_link = request.form['facebook_link']
-    venue.web_link = request.form['website_link']
+    venue.website = request.form['website_link']
     venue.genres = request.form.getlist('genres')
-    venue.talent_required = seeking_talent
-    venue.talent_description = request.form['seeking_description']
+    venue.seeking_talent = seeking_talent
+    venue.seeking_description = request.form['seeking_description']
 
     db.session.commit()
   except:
@@ -682,10 +681,10 @@ def create_artist_submission():
                     phone = form.phone.data,
                     image_link = form.image_link.data,
                     facebook_link = form.facebook_link.data,
-                    web_link = form.website_link.data,
+                    website = form.website_link.data,
                     genres = form.genres.data,
-                    venue_required = form.seeking_venue.data,
-                    venue_description = form.seeking_description.data
+                    seeking_venue = form.seeking_venue.data,
+                    seeking_description = form.seeking_description.data
                     )
       # Add data to db and commit
       db.session.add(artist)
